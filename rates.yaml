@@ -1,0 +1,54 @@
+- title: "Genesis Low User"
+  daily_rate: 1.38
+  per_kwh_rate: 0.2934
+
+- title: "Genesis Normal User"
+  daily_rate: 2.4794
+  per_kwh_rate: 0.2437
+
+- title: "Electric Kiwi"
+  daily_rate: 1.15
+  bands:
+    weekday:
+      - start: "00:00"
+        end: "07:00"
+        rate: 0.2705
+      - start: "07:00"
+        end: "09:00"
+        rate: 0.5410
+      - start: "09:00"
+        end: "17:00"
+        rate: 0.3246
+      - start: "17:00"
+        end: "21:00"
+        rate: 0.5410
+      - start: "21:00"
+        end: "22:00"
+        rate: 0
+      - start: "22:00"
+        end: "23:00"
+        rate: 0.3246
+      - start: "23:00"
+        end: "24:00"
+        rate: 0.2705
+    weekend:
+      - start: "00:00"
+        end: "07:00"
+        rate: 0.2705
+      - start: "07:00"
+        end: "21:00"
+        rate: 0.3246
+      - start: "21:00"
+        end: "22:00"
+        rate: 0
+      - start: "22:00"
+        end: "23:00"
+        rate: 0.3246
+      - start: "23:00"
+        end: "24:00"
+        rate: 0.2705
+
+- title: "Meridian Economy 24"
+  daily_rate: 1.725
+  per_kwh_rate: 0.2532
+

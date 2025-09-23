@@ -1,0 +1,10 @@
+[project]
+name = "powertest"
+version = "0.1.0"
+description = "Allows user to compare different power company rates based on their historical usage."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=2.3.2",
+    "pyyaml>=6.0.2",
+]
