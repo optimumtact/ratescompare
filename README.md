@@ -2,7 +2,8 @@
 
 This project is a Python script that calculates and summarizes electricity usage and costs for multiple rate plans. It processes a CSV file containing interval-based electricity usage data and uses YAML configuration files to define rate plans and metadata about the CSV file structure.
 
-The csv file is intended to be the one that electric kiwi allows you to download
+The csv file should be formatted in the EIEP_13A format
+https://www.ea.govt.nz/documents/182/EIEP_13A_Electricity_conveyed_information_for_consumers.pdf
 
 ### Features
 
