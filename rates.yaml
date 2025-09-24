@@ -1,10 +1,42 @@
 - title: "Genesis Low User"
   daily_rate: 1.38
   per_kwh_rate: 0.2934
+  export_rates:
+    flat: 0.11
+
+- title: "Genesis Low User, 12 month term"
+  daily_rate: 1.38
+  per_kwh_rate: 0.2934
+  fixed_discount: 5
+  export_rates:
+    flat: 0.11
 
 - title: "Genesis Normal User"
   daily_rate: 2.4794
   per_kwh_rate: 0.2437
+  export_rates:
+    flat: 0.11
+
+- title: "Power shop Low User"
+  daily_rate: 1.725
+  per_kwh_rate: 0.2821
+  export_rates:
+    flat: 0.11
+
+- title: "Mercury low user everyday"
+  daily_rate: 1.725
+  per_kwh_rate: 0.2675
+  export_rates:
+    weekday:
+      - start: "07:00"
+        end: "21:00"
+        rate: 0.11
+    weekend:
+      - start: "00:00"
+        end: "24:00"
+        rate: 0.10
+    flat: 0.11   # fallback if no bands
+
 
 - title: "Electric Kiwi"
   daily_rate: 1.15
@@ -47,8 +79,12 @@
       - start: "23:00"
         end: "24:00"
         rate: 0.2705
+  export_rates:
+    flat: 0.11
 
 - title: "Meridian Economy 24"
   daily_rate: 1.725
   per_kwh_rate: 0.2532
+  export_rates:
+    flat: 0.11
 

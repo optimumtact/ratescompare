@@ -78,7 +78,6 @@ def main():
         config = yaml.safe_load(f)
 
     date_col = config["date_column"]
-
     combined_df = pd.DataFrame()
     for csvfile in args.csvfiles:
         df = pd.read_csv(csvfile)
@@ -87,6 +86,7 @@ def main():
     # Drop duplicate rows based on the date column, keeping the first occurrence
     df = combined_df.drop_duplicates(subset=[date_col]).copy()
     del combined_df
+
     interval_cols = config["interval_columns"]
 
     # Ensure date column exists
@@ -117,6 +117,7 @@ def main():
         daily_rate = plan.get("daily_rate", 0.0)
         per_kwh_rate = plan.get("per_kwh_rate", None)
         bands = plan.get("bands", None)  # None for flat rate
+        fixed_discount = plan.get("fixed_discount", 0.0)  # percentage, e.g. 5 = 5%
 
         daily_costs = []
 
@@ -124,7 +125,6 @@ def main():
         for idx, row in df.iterrows():
             day = row[date_col]
             is_weekend = day.weekday() >= 5  # Saturday=5, Sunday=6
-
             if bands:
                 # Banded rate
                 daily_cost = calculate_band_cost(
@@ -136,7 +136,6 @@ def main():
                 kwh = row[interval_cols].sum()
                 rate = per_kwh_rate if per_kwh_rate is not None else 0.0
                 daily_cost = daily_rate + kwh * rate
-
             daily_costs.append(daily_cost)
 
         df["daily_kwh"] = df[interval_cols].sum(axis=1)
@@ -154,6 +153,14 @@ def main():
             .reset_index()
         )
         monthly["Total_cost"] = monthly["Fixed_cost"] + monthly["Variable_cost"]
+
+        # Apply discount if present
+        if fixed_discount and fixed_discount > 0:
+            monthly["Discount"] = monthly["Total_cost"] * (fixed_discount / 100.0)
+            monthly["Total_cost"] = monthly["Total_cost"] - monthly["Discount"]
+        else:
+            monthly["Discount"] = 0.0
+
         monthly["Title"] = title
         monthly["Month"] = monthly[date_col].dt.strftime("%Y-%m")
         monthly = monthly[
@@ -164,6 +171,7 @@ def main():
                 "Days_in_month",
                 "Fixed_cost",
                 "Variable_cost",
+                "Discount",
                 "Total_cost",
             ]
         ]
@@ -177,6 +185,7 @@ def main():
                 "Days_in_month": [monthly["Days_in_month"].sum()],
                 "Fixed_cost": [monthly["Fixed_cost"].sum().round(2)],
                 "Variable_cost": [monthly["Variable_cost"].sum().round(2)],
+                "Discount": [monthly["Discount"].sum().round(2)],
                 "Total_cost": [monthly["Total_cost"].sum().round(2)],
             }
         )
