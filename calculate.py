@@ -53,7 +53,11 @@ def main():
     parser = argparse.ArgumentParser(
         description="Summarise electricity usage and cost for multiple rate plans (flat or banded)."
     )
-    parser.add_argument("csvfile", help="Path to the power CSV file")
+    parser.add_argument(
+        "csvfiles",
+        nargs="+",
+        help="Paths to one or more power CSV files (all must have the same format)",
+    )
     parser.add_argument(
         "--yamlfile",
         default="rates.yaml",
@@ -74,10 +78,16 @@ def main():
         config = yaml.safe_load(f)
 
     date_col = config["date_column"]
-    interval_cols = config["interval_columns"]
 
-    # --- Load CSV ---
-    df = pd.read_csv(args.csvfile)
+    combined_df = pd.DataFrame()
+    for csvfile in args.csvfiles:
+        df = pd.read_csv(csvfile)
+        combined_df = pd.concat([combined_df, df], ignore_index=True)
+
+    # Drop duplicate rows based on the date column, keeping the first occurrence
+    df = combined_df.drop_duplicates(subset=[date_col]).copy()
+    del combined_df
+    interval_cols = config["interval_columns"]
 
     # Ensure date column exists
     if date_col not in df.columns:
